@@ -46,10 +46,8 @@ SELECT AVG(total_amt_usd) mean_revenue
 FROM orders
 WHERE occurred_at BETWEEN '01-01-2014' AND '01-01-2015';
 
--- Total and average (USD) revenue by type of paper
-SELECT AVG(standard_qty) mean_standard, AVG(gloss_qty) mean_gloss, AVG(poster_qty) mean_poster, AVG(standard_amt_usd) mean_standard_usd, AVG(gloss_amt_usd) mean_gloss_usd, AVG(poster_amt_usd) mean_poster_usd
+-- Total revenue (USD) by type of paper (standard, gloss, poster)
+SELECT SUM(standard_amt_usd) total_standard_usd, SUM(gloss_amt_usd) total_gloss_usd, SUM(poster_amt_usd) total_poster_usd
 FROM orders
 WHERE occurred_at BETWEEN '01-01-2014' AND '01-01-2015';
-
-
 
