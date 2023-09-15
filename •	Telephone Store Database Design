@@ -1,0 +1,59 @@
+-- Created a database with two tables: 1) contain the inventory of the telephone store and 2) orders in store
+CREATE TABLE product (
+	product_id integer,
+	brand_id integer,
+	brand_name bpchar,
+	name bpchar,
+	price integer
+);
+
+INSERT INTO product VALUES (0001,001,'Apple','Iphone 14 128GB White', 539.00);
+INSERT INTO product VALUES (0002,001,'Apple','Iphone 14 128GB Black', 539.00);
+INSERT INTO product VALUES (0003,001,'Apple','Iphone 14 Pro 128GB White', 609.00);
+INSERT INTO product VALUES (0004,001,'Apple','Iphone 14 Pro 128GB Black', 609.00);
+INSERT INTO product VALUES (0005,001,'Apple','Iphone 14 Pro Max 128GB White', 709.00);
+INSERT INTO product VALUES (0006,001,'Apple','Iphone 14 Pro Max 128GB Black', 709.00);
+INSERT INTO product VALUES (0007,002,'Samsung','S23 128GB White', 799.00);
+INSERT INTO product VALUES (0008,002,'Samsung','S23 128GB Black', 799.00);
+INSERT INTO product VALUES (0009,002,'Samsung','S23+ 128GB White', 999.00);
+INSERT INTO product VALUES (0009,002,'Samsung','S23+ 128GB Black', 999.00);
+INSERT INTO product VALUES (0010,002,'Samsung','S23 Ultra 128GB White', 1099.00);
+INSERT INTO product VALUES (0011,002,'Samsung','S23 Ultra 128GB Black', 1099.00);
+COMMIT;
+
+CREATE TABLE store (
+	event_time timestamp, 
+	order_id integer,
+	user_id integer,
+	product_id integer
+);
+
+INSERT INTO store VALUES ('2023-09-14 15:00:00',00001,00001,0011);
+INSERT INTO store VALUES ('2023-09-14 15:30:00',00002,00001,0010);
+INSERT INTO store VALUES ('2023-09-14 15:00:00',00003,00002,0001);
+INSERT INTO store VALUES ('2023-09-14 15:39:00',00004,00003,0003);
+INSERT INTO store VALUES ('2023-09-14 16:44:00',00005,00004,0003);
+INSERT INTO store VALUES ('2023-09-14 16:44:00',00006,00005,0003);
+INSERT INTO store VALUES ('2023-09-14 16:44:00',00007,00005,0004);
+COMMIT;
+
+--Best seller product - Iphone 14 Pro 128GB Branco
+SELECT s.product_id, p.name, COUNT(*) best_seller
+FROM store s
+JOIN product p
+ON s.product_id = p.product_id
+GROUP BY s.product_id, p.name
+ORDER BY best_seller DESC
+LIMIT 1;
+
+-- Day total revenue - 5173€
+SELECT SUM (p.price) revenue
+FROM product p
+JOIN store s
+ON p.product_id = s.product_id;
+
+-- Costumer profile - Two costumers bought two products, the other three only bought one product
+SELECT user_id, COUNT (*) num_order
+FROM store
+GROUP BY user_id
+ORDER BY num_order DESC;
